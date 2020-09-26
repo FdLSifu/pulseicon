@@ -1,7 +1,4 @@
 #!/usr/bin/python
-
-import wx.adv
-import wx
 import os
 import psutil
 import time

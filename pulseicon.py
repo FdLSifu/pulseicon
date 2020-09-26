@@ -66,7 +66,12 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
         self.timer.start()
 
         self.vpn_connected = SystemTrayIcon.check_vpn_connected()
-        notify2.init("Pulse UI Icon")
+        try:
+            notify2.init("Pulse UI Icon")
+            self.notif = True
+        except:
+            self.notif = False
+            pass
 
     def changeIcon(self,icon):
         self.setIcon(QtGui.QIcon(TRAY_ICON_CONNECTED))
@@ -100,22 +105,24 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
         if not self.vpn_connected and new_state:
             self.setIcon(QtGui.QIcon(TRAY_ICON_CONNECTED))
             self.vpn_connected = new_state
-            n = notify2.Notification("Pulse Secure VPN Connected")
-            # Set the urgency level
-            n.set_urgency(notify2.URGENCY_NORMAL)
-            # Set the timeout
-            n.set_timeout(1000)
-            n.show()
+            if self.notif:
+                n = notify2.Notification("Pulse Secure VPN Connected")
+                # Set the urgency level
+                n.set_urgency(notify2.URGENCY_NORMAL)
+                # Set the timeout
+                n.set_timeout(1000)
+                n.show()
 
         elif self.vpn_connected and not new_state:
             self.setIcon(QtGui.QIcon(TRAY_ICON_NOTCONNECTED))
             self.vpn_connected = new_state
-            n = notify2.Notification("Pulse Secure VPN disconnected")
-            # Set the urgency level
-            n.set_urgency(notify2.URGENCY_NORMAL)
-            # Set the timeout
-            n.set_timeout(1000)
-            n.show()
+            if self.notif:
+                n = notify2.Notification("Pulse Secure VPN disconnected")
+                # Set the urgency level
+                n.set_urgency(notify2.URGENCY_NORMAL)
+                # Set the timeout
+                n.set_timeout(1000)
+                n.show()
         dlog("wake up to work")
         return
     
